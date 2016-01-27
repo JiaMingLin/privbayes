@@ -32,9 +32,14 @@ public class Domain {
 		isBinary = false;
 		
 		for (int d = 0; d < dim; d++) {
+			
+			// read each line in "*.domain" file, and splitting by space. 
 			String[] tokens = domainFile.readLine().split("\\s+");
 			
+			// the first token defines the attribute type, continuous "C" or discrete "D".
 			if (tokens[0].equals("C")) {
+				
+				// the last integer specified in "*.domain" file when type is "C", which means continuous.
 				int grid = Integer.parseInt(tokens[3]);
 				
 				cells[d] = grid;
@@ -46,6 +51,8 @@ public class Domain {
 					dt.insert(tokens[i]);
 				}
 				
+				// the number of categories of discrete attribute.
+				// for a discrete attribute, the first token defines type, the remaining specifies categories. 
 				cells[d] = tokens.length - 1;
 				trans.put(d, dt);
 			}

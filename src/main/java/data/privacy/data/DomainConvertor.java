@@ -19,11 +19,14 @@ public class DomainConvertor {
 	public DomainConvertor(Domain domain){
 		gDomain = domain;
 		int biDim = 0;
+		
+		// exactly the number of attributes specified in "*.domain" file.
 		int dim = domain.getDim();
 		pos = new int[dim];
 		len = new int[dim];
 		
 		for (int i = 0; i<dim; i++){
+			// [0, 4, 7, 11, 15, 19, 22, 26, 29, 32, 33, 37, 41, 45, 51]
 			pos[i] = biDim;
 			len[i] = GenTool.log2(domain.getCell(i) - 1).intValue() + 1;
 			biDim += len[i];
