@@ -50,6 +50,7 @@ public class DomainConvertor {
 		int[][] bEntries = new int[num][bDomain.getDim()];
 		
 		for (int i = 0; i<num; i++){
+			// [0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0]
 			bEntries[i] = binaryData(gData.getEntry(i));
 		}
 		
