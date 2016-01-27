@@ -12,8 +12,7 @@ import data.privacy.methods.*;
 import data.privacy.data.*;
 
 public class Bayes_libsvm_data2 {
-
-	private static final String RESOURCE_PATH = "/root/git/privbayes/resources/";  
+	
 	/**
 	 * @param args
 	 * @throws Exception 
@@ -63,17 +62,17 @@ public class Bayes_libsvm_data2 {
 		//end of model setting
 
 
-		Domain domain = new Domain(RESOURCE_PATH+"Data2.domain");
-		Data gTrain = new Data(RESOURCE_PATH+"Train2_1.dat", domain);
+		Domain domain = new Domain("Data2.domain");
+		Data gTrain = new Data("Train2_1.dat", domain);
 		Data bTrain = gTrain.binarization();
-		bTrain.loadCache(RESOURCE_PATH+"bTrain2_4ways.cache");
+		bTrain.loadCache("bTrain2_4ways.cache");
 
 		//new DataPrinter("Test2.dat", domain).printo_libsvm("d2model"+model+".test", yPos, ySet); 			//TestDataConvertor
 		
-		PrintStream outFile = new PrintStream(new File(RESOURCE_PATH+"data2model"+model+"_"+epsilon+".txt"));
+		PrintStream outFile = new PrintStream(new File("data2model"+model+"_"+epsilon+".txt"));
 
 		//loading test file=========================
-		BufferedReader testFile = new BufferedReader(new FileReader(RESOURCE_PATH+"d2model"+model+".test"));
+		BufferedReader testFile = new BufferedReader(new FileReader("d2model"+model+".test"));
 		String s = testFile.readLine();
 		ArrayList<Integer> testY = new ArrayList<Integer>();
 
