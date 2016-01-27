@@ -45,7 +45,7 @@ public class Data implements CountingQuery, ContingencyTable{
 			updateGlobal(intTokens);
 			entries[s] = intTokens;
 		}
-		dataFile.close();
+		dataFile.close(); // System.out.println(global.size)
 		
 		cCache = new HashMap<cQuery, Double>();
 		fCache = new HashMap<Marginal, Double>();
@@ -84,6 +84,7 @@ public class Data implements CountingQuery, ContingencyTable{
 	//Domain Related
 	
 	public Data binarization() {
+		System.out.println("Data dimension in binarization: "+domain.getDim());
 		return domain.binarization(this);
 	}
 	
@@ -291,7 +292,7 @@ public class Data implements CountingQuery, ContingencyTable{
 		
 		HashMap<Integer, Integer> states = new HashMap<Integer, Integer>();
 		states.put(0, 0);
-		int ceil = (num+1)/2;
+		int ceil = (num+1)/2; // num = data size
 		
 		for (cQuery cq : QueryGenerator.mrg2cq(this, dep.p)){
 			

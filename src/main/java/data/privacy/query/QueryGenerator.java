@@ -34,7 +34,7 @@ public class QueryGenerator {
 		return GenTool.rndSubset(rng, cq, (int) (ratio * cq.size()));
 	}
 	
-	public static HashSet<cQuery> mrg2cq(Data data, HashSet<Integer> mrg) {
+	public static HashSet<cQuery> mrg2cq(Data data, HashSet<Integer> mrg) { // mrg = 1. [init]
 		// TODO Auto-generated method stub
 		HashSet<cQuery> ans = new HashSet<cQuery>();
 		if (mrg.isEmpty()){

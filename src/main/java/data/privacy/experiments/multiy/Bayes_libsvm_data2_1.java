@@ -11,7 +11,7 @@ import data.privacy.methods.*;
 
 import data.privacy.data.*;
 
-public class Bayes_libsvm_data2 {
+public class Bayes_libsvm_data2_1 {
 
 	private static final String RESOURCE_PATH = "/root/git/privbayes/resources/";  
 	/**
@@ -66,44 +66,45 @@ public class Bayes_libsvm_data2 {
 		Domain domain = new Domain(RESOURCE_PATH+"Data2.domain");
 		Data gTrain = new Data(RESOURCE_PATH+"Train2_1.dat", domain);
 		Data bTrain = gTrain.binarization();
-		bTrain.loadCache(RESOURCE_PATH+"bTrain2_4ways.cache");
-
+		bTrain.loadCache(RESOURCE_PATH+"bTrain2_4ways_1.cache");
+		Bayesian	bayes = new Bayesian(rng, bTrain, epsilon, 0.5, 4.0, 1);
+		bayes.release().generalization().printo_data("TestingSample.csv", ",");
 		//new DataPrinter("Test2.dat", domain).printo_libsvm("d2model"+model+".test", yPos, ySet); 			//TestDataConvertor
 		
-		PrintStream outFile = new PrintStream(new File(RESOURCE_PATH+"data2model"+model+"_"+epsilon+".txt"));
-
-		//loading test file=========================
-		BufferedReader testFile = new BufferedReader(new FileReader(RESOURCE_PATH+"d2model"+model+".test"));
-		String s = testFile.readLine();
-		ArrayList<Integer> testY = new ArrayList<Integer>();
-
-		while (s != null) {
-			testY.add(Integer.parseInt(s.split(" ")[0]));
-			s = testFile.readLine();
-		}
-
-		testFile.close();
-		//end of loading test file==================
-
-		for (int i = 0; i < rep; i++) {
-			System.out.println(i);
-
-			Bayesian	bayes = new Bayesian(rng, bTrain, epsilon, 0.5, 4.0, 3);
-			bayes.release().generalization().printo_libsvm("d2model"+model, yPos, ySet);   //print the synthetic training data (LIBSVM format)
-
-			Runtime.getRuntime().exec("svm-train -t 2 d2model"+model).waitFor();
-			Runtime.getRuntime().exec("svm-predict d2model"+model+".test d2model"+model+".model d2model"+model+".pred").waitFor();
-
-			BufferedReader predFile = new BufferedReader(new FileReader("d2model"+model+".pred"));
-			double err = 0.0;				
-			for (int t = 0; t < testY.size(); t++) {
-				if (testY.get(t) != Integer.parseInt(predFile.readLine()))
-					err++;
-			}
-			predFile.close();
-
-			outFile.println(err/testY.size() + "\t");
-		}
-		outFile.close();
+//		PrintStream outFile = new PrintStream(new File(RESOURCE_PATH+"data2model"+model+"_"+epsilon+".txt"));
+//
+//		//loading test file=========================
+//		BufferedReader testFile = new BufferedReader(new FileReader(RESOURCE_PATH+"d2model"+model+".test"));
+//		String s = testFile.readLine();
+//		ArrayList<Integer> testY = new ArrayList<Integer>();
+//
+//		while (s != null) {
+//			testY.add(Integer.parseInt(s.split(" ")[0]));
+//			s = testFile.readLine();
+//		}
+//
+//		testFile.close();
+//		//end of loading test file==================
+//
+//		for (int i = 0; i < rep; i++) {
+//			System.out.println(i);
+//
+//			
+//			bayes.release().generalization().printo_libsvm("d2model"+model, yPos, ySet);   //print the synthetic training data (LIBSVM format)
+//
+//			Runtime.getRuntime().exec("svm-train -t 2 d2model"+model).waitFor();
+//			Runtime.getRuntime().exec("svm-predict d2model"+model+".test d2model"+model+".model d2model"+model+".pred").waitFor();
+//
+//			BufferedReader predFile = new BufferedReader(new FileReader("d2model"+model+".pred"));
+//			double err = 0.0;				
+//			for (int t = 0; t < testY.size(); t++) {
+//				if (testY.get(t) != Integer.parseInt(predFile.readLine()))
+//					err++;
+//			}
+//			predFile.close();
+//
+//			outFile.println(err/testY.size() + "\t");
+//		}
+//		outFile.close();
 	}
 }

@@ -29,12 +29,14 @@ public class Bayesian implements CountingQuery, ContingencyTable {
 		// TODO Auto-generated constructor stub
 		// rng1: random seed;		data1: sensitive database;		ep: privacy budget;		alloc: budget split (default 0.5)
 		// theta: theta-usefulness (default 4.0)					kbound: upper bound of k (bound computational cost)
-		
+//		System.out.println("Data dimension in Bayesian: "+data.getDim());
 		data = data1;
 		rng = rng1;
 		
 		k = kbound;													//theta-usefulness
 		while (k > 0){
+			double num1 = ep * (1-alloc) * data.getNum();
+			double num2 = theta * (data.getDim() - k) * Math.pow(2.0, k+2);
 			if (ep * (1-alloc) * data.getNum() >= theta * (data.getDim() - k) * Math.pow(2.0, k+2))
 				break;
 			k--;
@@ -76,14 +78,15 @@ public class Bayesian implements CountingQuery, ContingencyTable {
 		double delta = 1.0;
 		
 		HashSet<Integer> S = new HashSet<Integer>();
+		// [0,1,2,...,51]
 		HashSet<Integer> V = GenTool.newSet(dim);
-		
-		int init = rng.nextInt(dim);
-		S.add(init);
-		V.remove(init);
-		model.put(init, new HashSet<Integer>());
+		int init = rng.nextInt(dim); // init
+		S.add(init); // [init]
+		V.remove(init); //  [0,1,2,...,51] \ [init]
+		model.put(init, new HashSet<Integer>()); //[ init <- []]
 		
 		for (int i = 0; i<dim-1; i++){
+			System.out.println("Learning for dim: "+i);
 			HashMap<Dependence, Double> deps = new HashMap<Dependence, Double>();
 			for (Dependence dep : S2V(S, V, k)){
 				deps.put(dep, data.l1Req(dep));
@@ -104,6 +107,7 @@ public class Bayesian implements CountingQuery, ContingencyTable {
 		
 		HashSet<Dependence> ans = new HashSet<Dependence>();
 		HashSet<HashSet<Integer>> kS = GenTool.kSub(S, k);
+		// 1. [[init]]
 		if (kS.isEmpty()) kS.add(new HashSet<Integer>(S));
 		
 		for (HashSet<Integer> source : kS){
