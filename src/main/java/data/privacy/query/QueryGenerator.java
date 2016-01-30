@@ -45,7 +45,6 @@ public class QueryGenerator {
 		int pos = mrg.iterator().next();
 		HashSet<Integer> subset = new HashSet<Integer>(mrg);
 		subset.remove(pos);
-		
 		for (cQuery cq : mrg2cq(data, subset)){
 			for (int i = 0; i<data.getCell(pos); i++){
 				HashMap<Integer, Integer> subMap = new HashMap<Integer, Integer>(cq.getDetails());
@@ -53,7 +52,6 @@ public class QueryGenerator {
 				ans.add(new cQuery(subMap));
 			}
 		}
-		
 		return ans;
 	}
 	
