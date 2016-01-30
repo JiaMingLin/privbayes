@@ -86,18 +86,36 @@ public class Bayesian implements CountingQuery, ContingencyTable {
 		model.put(init, new HashSet<Integer>()); //[ init <- []]
 		
 		for (int i = 0; i<dim-1; i++){
-			System.out.println("Learning for dim: "+i);
+			System.out.println("Learning for dim= "+i);
+			
 			HashMap<Dependence, Double> deps = new HashMap<Dependence, Double>();
-			for (Dependence dep : S2V(S, V, k)){
-				deps.put(dep, data.l1Req(dep));
+			
+//			long start_s2v = System.currentTimeMillis();
+			HashSet<Dependence> tempSet = S2V(S, V, k);
+//			long stop_s2v = System.currentTimeMillis();
+//			System.out.println("Length of candidates: "+tempSet.size());
+//			System.out.println("S2V Spands: "+(stop_s2v-start_s2v));
+			
+//			long start_l1 = System.currentTimeMillis();
+			for (Dependence dep : tempSet){
+				double l1 = data.l1Req(dep);
+				deps.put(dep, l1);
 			}
-			Dependence picked = PrivTool.ExpoMech(rng, deps, ep/(dim-1), delta);
+//			long stop_l1 = System.currentTimeMillis();
+//			System.out.println("l1 Spands: "+(stop_l1-start_l1));
+			
+			
+//			long start_pick = System.currentTimeMillis();
+			Dependence picked = PrivTool.ExpoMech(rng, deps, ep/(dim-1), delta);		
+//			long stop_pick = System.currentTimeMillis();
+//			System.out.println("Pick Spands: "+(stop_pick-start_pick));
+//			System.out.println("======================================");
 			S.add(picked.x);
 			V.remove(picked.x);
 			
 			model.put(picked);
 		}
-		
+		System.out.println("model: "+model);
 		return model;
 	}
 	

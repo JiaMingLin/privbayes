@@ -294,7 +294,15 @@ public class Data implements CountingQuery, ContingencyTable{
 		states.put(0, 0);
 		int ceil = (num+1)/2; // num = data size
 		
-		for (cQuery cq : QueryGenerator.mrg2cq(this, dep.p)){
+		long cq_start = System.currentTimeMillis();
+		HashSet<cQuery> CQSet = QueryGenerator.mrg2cq(this, dep.p);
+		long cq_stop = System.currentTimeMillis();
+		System.out.println("Numbers of CQ: "+CQSet.size());
+		System.out.println("CQ Spands: "+(cq_stop - cq_start));
+		
+		
+		long scoring_start = System.currentTimeMillis();
+		for (cQuery cq : CQSet){
 			
 			cq.put(dep.x, 0);
 			int a = cReq(new cQuery(cq)).intValue();
@@ -327,6 +335,8 @@ public class Data implements CountingQuery, ContingencyTable{
 			double score = A + B - num;
 			if (score > ans) ans = score;
 		}
+		long scoring_stop = System.currentTimeMillis();
+		System.out.println("Scoring Spends: "+ (scoring_stop - scoring_start));
 		
 		l1Cache.put(dep, ans);
 		return ans;
