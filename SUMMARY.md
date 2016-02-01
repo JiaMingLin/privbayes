@@ -3,5 +3,5 @@
 * [Introduction](README.md)
 * [Prelimary](documents/prelimary.md)
 * [Implements](implements.md)
-   * GreedyBayes
+   * [GreedyBayes](greedybayes.md)
 
