@@ -13,4 +13,6 @@ Generating the Bayesian Network(BN) from data.
 1. epsilon: the **privacy budget**
 1. Initialize S and V: 
     * **S**: initially consists of the index of a random picked attributes.
-    * **V**: consists of the indexes of all attributes
+    * **V**: consists of the indexes of all attributes except those in **S**.
+   
+  For example:
