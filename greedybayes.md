@@ -12,5 +12,5 @@ Generating the Bayesian Network(BN) from data.
 ![greedy_method_main](greed_method.bmp)
 1. epsilon: the **privacy budget**
 1. Initialize S and V: 
-    * **S**: initially consists of a index of a random picked attributes.
+    * **S**: initially consists of the index of a random picked attributes.
     * **V**: consists of the indexes of all attributes
