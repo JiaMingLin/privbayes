@@ -8,5 +8,9 @@ Generating the Bayesian Network(BN) from data.
     
     Where $$P_{i}$$ are the parent nodes with number no more then the degree of Bayesian network $$k$$.
 
-## Process
-![](greed_method.bmp)
+## Main Process
+![greedy_method_main](greed_method.bmp)
+1. epsilon: the **privacy budget**
+1. Initialize S and V: 
+    * **S**: initially consists of a index of a random picked attributes.
+    * **V**: consists of the indexes of all attributes
