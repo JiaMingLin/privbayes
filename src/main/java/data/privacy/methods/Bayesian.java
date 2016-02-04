@@ -37,7 +37,7 @@ public class Bayesian implements CountingQuery, ContingencyTable {
 		while (k > 0){
 			double num1 = ep * (1-alloc) * data.getNum();
 			double num2 = theta * (data.getDim() - k) * Math.pow(2.0, k+2);
-			if (ep * (1-alloc) * data.getNum() >= theta * (data.getDim() - k) * Math.pow(2.0, k+2))
+			if (num1 >= num2)
 				break;
 			k--;
 		}

@@ -13,7 +13,7 @@ public class TestArea {
 
 	private static final String RESOURCE_PATH = "/root/git/privbayes/resources/";
 	public static void main(String[] args) throws Exception {
-		testL1Ans();
+		testMrg2CQ();
 								
 	}
 	

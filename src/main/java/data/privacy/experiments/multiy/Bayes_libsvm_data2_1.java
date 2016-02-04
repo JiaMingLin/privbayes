@@ -24,7 +24,7 @@ public class Bayes_libsvm_data2_1 {
 		gTrain.printo_int("result/CensusDataTrans.csv", ",");
 		Data bTrain = gTrain.binarization();
 		
-		Bayesian bayes = new Bayesian(rng, bTrain, epsilon, 0.5, 4.0, 3);
+		Bayesian bayes = new Bayesian(rng, bTrain, epsilon, 0.5, 4.0, 2);
 		bayes.release().generalization().printo_int("result/SyntheticDataTrans.csv", ",");
 		bayes.release().generalization()
 				.printo_data("result/SyntheticData.csv", ",");
