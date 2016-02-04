@@ -294,16 +294,16 @@ public class Data implements CountingQuery, ContingencyTable{
 		states.put(0, 0);
 		int ceil = (num+1)/2; // num = data size
 		
-//		long cq_start = System.currentTimeMillis();
+		long cq_start = System.currentTimeMillis();
 		HashSet<cQuery> CQSet = QueryGenerator.mrg2cq(this, dep.p);
 //		System.out.println(CQSet.size());
 //		System.out.println(CQSet);
-//		long cq_stop = System.currentTimeMillis();
+		long cq_stop = System.currentTimeMillis();
 //		System.out.println("Numbers of CQ: "+CQSet.size());
 //		System.out.println("CQ Spands: "+(cq_stop - cq_start));
 		
 		
-//		long scoring_start = System.currentTimeMillis();
+		long scoring_start = System.currentTimeMillis();
 		for (cQuery cq : CQSet){
 			
 			cq.put(dep.x, 0);
@@ -326,10 +326,12 @@ public class Data implements CountingQuery, ContingencyTable{
 					newStates.put(A, newB);
 				}
 			}
-			
+//			System.out.println("State size: "+states.size());
 			states = newStates;
 		}
 		
+		long scoring_stop = System.currentTimeMillis();
+//		System.out.println("Scoring Spends: "+ (scoring_stop - scoring_start));
 		ans = -num;
 		
 		for (int A : states.keySet()){
@@ -337,8 +339,7 @@ public class Data implements CountingQuery, ContingencyTable{
 			double score = A + B - num;
 			if (score > ans) ans = score;
 		}
-//		long scoring_stop = System.currentTimeMillis();
-//		System.out.println("Scoring Spends: "+ (scoring_stop - scoring_start));
+
 		
 		l1Cache.put(dep, ans);
 		return ans;

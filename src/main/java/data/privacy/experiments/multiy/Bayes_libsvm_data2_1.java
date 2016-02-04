@@ -7,7 +7,7 @@ import data.privacy.data.*;
 
 public class Bayes_libsvm_data2_1 {
 
-	private static final String RESOURCE_PATH = "/root/git/privbayes/resources/";
+	private static final String RESOURCE_PATH = "D:\\GitHome\\privbayes\\resources\\";
 
 	/**
 	 * @param args
