@@ -11,9 +11,9 @@ import data.privacy.tools.GenTool;
 
 public class TestArea {
 
-	private static final String RESOURCE_PATH = "/root/git/privbayes/resources/";
+	private static final String RESOURCE_PATH = "D:\\GitHome\\privbayes\\resources\\";
 	public static void main(String[] args) throws Exception {
-		testL1Ans();
+		testMrg2CQ();
 								
 	}
 	
@@ -52,6 +52,23 @@ public class TestArea {
 		Data bTrain = gTrain.binarization();
 		System.out.println(dep);
 		double result = bTrain.l1Req(dep);
+		System.out.println(result);
+	}
+	
+	public static void testCAns() throws Exception{
+		HashSet<Integer> mrg = new HashSet<Integer>();
+		for(int i=1 ;i<3 ;i++){
+			mrg.add(i);
+		}
+		Dependence dep = new Dependence(0, mrg);
+		Domain domain = new Domain(RESOURCE_PATH + "Example.domain.csv");
+		Data gTrain = new Data(RESOURCE_PATH + "ExCensus.dat", domain);
+		Data bTrain = gTrain.binarization();
+		
+		cQuery cq = new cQuery();
+		cq.put(dep.x, 0);
+		System.out.println(dep);				
+		int result = bTrain.cReq(cq).intValue();;
 		System.out.println(result);
 	}
 }

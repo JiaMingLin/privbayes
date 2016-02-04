@@ -90,26 +90,26 @@ public class Bayesian implements CountingQuery, ContingencyTable {
 			
 			HashMap<Dependence, Double> deps = new HashMap<Dependence, Double>();
 			
-//			long start_s2v = System.currentTimeMillis();
+			long start_s2v = System.currentTimeMillis();
 			HashSet<Dependence> tempSet = S2V(S, V, k);
-//			long stop_s2v = System.currentTimeMillis();
-//			System.out.println("Length of candidates: "+tempSet.size());
-//			System.out.println("S2V Spands: "+(stop_s2v-start_s2v));
+			long stop_s2v = System.currentTimeMillis();
+			System.out.println("Length of S set: "+S.size()+", candidates: "+tempSet.size());
+			System.out.println("S2V Spands: "+(stop_s2v-start_s2v));
 			
-//			long start_l1 = System.currentTimeMillis();
+			long start_l1 = System.currentTimeMillis();
 			for (Dependence dep : tempSet){
 				double l1 = data.l1Req(dep);
 				deps.put(dep, l1);
 			}
-//			long stop_l1 = System.currentTimeMillis();
-//			System.out.println("l1 Spands: "+(stop_l1-start_l1));
+			long stop_l1 = System.currentTimeMillis();
+			System.out.println("L1Req Spands: "+(stop_l1-start_l1));
 			
 			
-//			long start_pick = System.currentTimeMillis();
+			long start_pick = System.currentTimeMillis();
 			Dependence picked = PrivTool.ExpoMech(rng, deps, ep/(dim-1), delta);		
-//			long stop_pick = System.currentTimeMillis();
-//			System.out.println("Pick Spands: "+(stop_pick-start_pick));
-//			System.out.println("======================================");
+			long stop_pick = System.currentTimeMillis();
+			System.out.println("Pick Spands: "+(stop_pick-start_pick));
+			System.out.println("======================================");
 			S.add(picked.x);
 			V.remove(picked.x);
 			
