@@ -6,12 +6,13 @@ import data.privacy.data.Data;
 import data.privacy.data.Domain;
 import data.privacy.query.QueryGenerator;
 import data.privacy.query.cQuery;
+import data.privacy.system.PropReader;
 import data.privacy.tools.Dependence;
 import data.privacy.tools.GenTool;
 
 public class TestArea {
 
-	private static final String RESOURCE_PATH = "D:\\GitHome\\privbayes\\resources\\";
+	private static final String RESOURCE_PATH = PropReader.getPropStr("RESOURCE_PATH");
 	public static void main(String[] args) throws Exception {
 		testMrg2CQ();
 								

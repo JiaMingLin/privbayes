@@ -5,10 +5,11 @@ import java.util.Random;
 import data.privacy.data.Data;
 import data.privacy.data.Domain;
 import data.privacy.methods.Bayesian;
+import data.privacy.system.PropReader;
 
 public class Fakedata {
 
-	private static final String RESOURCE_PATH = "D:\\GitHome\\privbayes\\resources\\";
+	private static final String RESOURCE_PATH = PropReader.getPropStr("RESOURCE_PATH");
 
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub

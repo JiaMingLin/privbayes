@@ -1,13 +1,14 @@
 package data.privacy.experiments.multiy;
 
 import java.util.Random;
-import data.privacy.methods.*;
 
+import data.privacy.methods.*;
+import data.privacy.system.PropReader;
 import data.privacy.data.*;
 
 public class Bayes_libsvm_data2_1 {
 
-	private static final String RESOURCE_PATH = "D:\\GitHome\\privbayes\\resources\\";
+	private static final String RESOURCE_PATH = PropReader.getPropStr("RESOURCE_PATH");
 
 	/**
 	 * @param args
