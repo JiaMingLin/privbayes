@@ -13,8 +13,9 @@ import data.privacy.tools.GenTool;
 public class TestArea {
 
 	private static final String RESOURCE_PATH = PropReader.getPropStr("RESOURCE_PATH");
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Exception {		
 		testMrg2CQ();
+		testCAns();
 								
 	}
 	
@@ -62,14 +63,15 @@ public class TestArea {
 			mrg.add(i);
 		}
 		Dependence dep = new Dependence(0, mrg);
-		Domain domain = new Domain(RESOURCE_PATH + "Example.domain.csv");
-		Data gTrain = new Data(RESOURCE_PATH + "ExCensus.dat", domain);
+		Domain domain = new Domain(RESOURCE_PATH + "fakedata.domain.csv");
+		Data gTrain = new Data(RESOURCE_PATH + "fakedata.csv", domain);
 		Data bTrain = gTrain.binarization();
 		
 		cQuery cq = new cQuery();
 		cq.put(dep.x, 0);
-		System.out.println(dep);				
-		int result = bTrain.cReq(cq).intValue();;
+		System.out.println("CQuery: "+cq);
+		System.out.println("Dependency: "+dep);				
+		int result = bTrain.cReq(cq).intValue();
 		System.out.println(result);
 	}
 }

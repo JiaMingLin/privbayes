@@ -8,12 +8,11 @@ import data.privacy.query.ContingencyTable;
 import data.privacy.query.CountingQuery;
 import data.privacy.query.QueryGenerator;
 import data.privacy.query.cQuery;
-
 import data.privacy.tools.PrivTool;
 import data.privacy.tools.DAG;
 import data.privacy.tools.Dependence;
 import data.privacy.tools.GenTool;
-
+import data.privacy.tools.TimeBottle;
 import data.privacy.data.Data;
 
 
@@ -94,7 +93,8 @@ public class Bayesian implements CountingQuery, ContingencyTable {
 			HashSet<Dependence> tempSet = S2V(S, V, k);
 			long stop_s2v = System.currentTimeMillis();
 			System.out.println("Length of S set: "+S.size()+", candidates: "+tempSet.size());
-			System.out.println("S2V Spands: "+(stop_s2v-start_s2v));
+			//System.out.println("S2V Spands: "+(stop_s2v-start_s2v));
+			TimeBottle.saveTime("S2V",(int)(stop_s2v-start_s2v));
 			
 			long start_l1 = System.currentTimeMillis();
 			for (Dependence dep : tempSet){
@@ -102,20 +102,19 @@ public class Bayesian implements CountingQuery, ContingencyTable {
 				deps.put(dep, l1);
 			}
 			long stop_l1 = System.currentTimeMillis();
-			System.out.println("L1Req Spands: "+(stop_l1-start_l1));
-			
+			//System.out.println("L1Req Spands: "+(stop_l1-start_l1));
+			TimeBottle.saveTime("L1Req", (int)(stop_l1-start_l1));
 			
 			long start_pick = System.currentTimeMillis();
 			Dependence picked = PrivTool.ExpoMech(rng, deps, ep/(dim-1), delta);		
 			long stop_pick = System.currentTimeMillis();
-			System.out.println("Pick Spands: "+(stop_pick-start_pick));
-			System.out.println("======================================");
+			//System.out.println("Pick Spands: "+(stop_pick-start_pick));
+			TimeBottle.saveTime("Pick", (int)(stop_pick-start_pick));			
 			S.add(picked.x);
 			V.remove(picked.x);
 			
 			model.put(picked);
 		}
-		System.out.println("model: "+model);
 		return model;
 	}
 	

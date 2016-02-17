@@ -27,8 +27,8 @@ def query2(df):
 def defference(census, synthetic):
     return census[0] - synthetic[0]
 
-def persent():
-    retrun 
+#def persent():
+#    retrun 
 
 print "Query age1 > 50 and age2 > 50"
 q0_census = query0(census_df).shape

@@ -12,10 +12,10 @@ import java.util.HashSet;
 import java.util.Random;
 
 import data.privacy.query.*;
-
 import data.privacy.tools.Dependence;
 import data.privacy.tools.GenTool;
 import data.privacy.tools.Sortable;
+import data.privacy.tools.TimeBottle;
 
 public class Data implements CountingQuery, ContingencyTable{
 	
@@ -294,11 +294,11 @@ public class Data implements CountingQuery, ContingencyTable{
 		states.put(0, 0);
 		int ceil = (num+1)/2; // num = data size
 		
-		long cq_start = System.currentTimeMillis();
+//		long cq_start = System.currentTimeMillis();
 		HashSet<cQuery> CQSet = QueryGenerator.mrg2cq(this, dep.p);
 //		System.out.println(CQSet.size());
 //		System.out.println(CQSet);
-		long cq_stop = System.currentTimeMillis();
+//		long cq_stop = System.currentTimeMillis();
 //		System.out.println("Numbers of CQ: "+CQSet.size());
 //		System.out.println("CQ Spands: "+(cq_stop - cq_start));
 		
@@ -306,13 +306,17 @@ public class Data implements CountingQuery, ContingencyTable{
 		long scoring_start = System.currentTimeMillis();
 		for (cQuery cq : CQSet){
 			
+			long cReq_start = System.currentTimeMillis();
 			cq.put(dep.x, 0);
 			int a = cReq(new cQuery(cq)).intValue();
+			long cReq_stop = System.currentTimeMillis();
+			TimeBottle.saveTime("cReq", (int)(cReq_stop - cReq_start));
+			
 			cq.put(dep.x, 1);
 			int b = cReq(new cQuery(cq)).intValue();
 			
 			HashMap<Integer, Integer> newStates = new HashMap<Integer, Integer>();
-			
+			long update_state_start = System.currentTimeMillis();
 			for (int A : states.keySet()){
 				int B = states.get(A);
 				int newA = Math.min(A + a, ceil);
@@ -327,11 +331,14 @@ public class Data implements CountingQuery, ContingencyTable{
 				}
 			}
 //			System.out.println("State size: "+states.size());
+			long update_state_stop = System.currentTimeMillis();
+			TimeBottle.saveTime("State Update", (int)(update_state_stop - update_state_start));
 			states = newStates;
 		}
 		
 		long scoring_stop = System.currentTimeMillis();
 //		System.out.println("Scoring Spends: "+ (scoring_stop - scoring_start));
+		TimeBottle.saveTime("Scoring", (int)(scoring_stop - scoring_start));
 		ans = -num;
 		
 		for (int A : states.keySet()){
