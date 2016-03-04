@@ -25,14 +25,17 @@ public class Bayes_marginals {
 		int ds = Integer.parseInt(args[0]);												//dataset
 		int wl = Integer.parseInt(args[1]);												//degree of workload
 		double epsilon = Double.parseDouble(args[2]);									//privacy budget
-
-		Data gData = new Data("Data"+ds+".dat", new Domain("Data"+ds+".domain"));		//load data (in general domain)
+		String sourceData = args[3];
+		String domainData = args[4];
+		String report = args[5];
+		
+		Data gData = new Data(sourceData, new Domain(domainData));		//load data (in general domain)
 		Data bData = gData.binarization();												//binarization
-		bData.loadCache("bData"+ds+"_"+(kb[ds]+1)+"ways.cache");						//cache file contains ALL k-way marginals of the BINARY DATA (makes computation faster)
-		int rep = 20;
+		//bData.loadCache("bData"+ds+"_"+(kb[ds]+1)+"ways.cache");						//cache file contains ALL k-way marginals of the BINARY DATA (makes computation faster)
+		int rep = 10;
 				
 		HashSet<Marginal> mrgs = QueryGenerator.kwayMrg(gData, wl);						//generate workload
-		PrintStream outFile = new PrintStream(new File("data"+ds+"mrg"+wl+"_" +epsilon+".txt"));
+		PrintStream outFile = new PrintStream(new File(report));
 
 		for (int i = 0; i < rep; i++){
 			System.out.println(i);

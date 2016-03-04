@@ -42,7 +42,6 @@ public class Bayesian implements CountingQuery, ContingencyTable {
 		}
 		if (k == 0) alloc = 0.0;									//k=0 -> all attributes are independent, no need to learn Bayesian network
 		
-		System.out.println(k);
 		
 		DAG model = Model_Greedy(ep * alloc);						//learn Bayesian network, budget: ep * alloc 
 		int[][] intSyn = null;										
@@ -85,14 +84,15 @@ public class Bayesian implements CountingQuery, ContingencyTable {
 		model.put(init, new HashSet<Integer>()); //[ init <- []]
 		
 		for (int i = 0; i<dim-1; i++){
-			System.out.println("Learning for dim= "+i);
+			System.out.print(i);
+//			System.out.println("Learning for dim= "+i);
 			
 			HashMap<Dependence, Double> deps = new HashMap<Dependence, Double>();
 			
 			long start_s2v = System.currentTimeMillis();
 			HashSet<Dependence> tempSet = S2V(S, V, k);
 			long stop_s2v = System.currentTimeMillis();
-			System.out.println("Length of S set: "+S.size()+", candidates: "+tempSet.size());
+//			System.out.println("Length of S set: "+S.size()+", candidates: "+tempSet.size());
 			//System.out.println("S2V Spands: "+(stop_s2v-start_s2v));
 			TimeBottle.saveTime("S2V",(int)(stop_s2v-start_s2v));
 			
