@@ -9,10 +9,18 @@ import data.privacy.query.Marginal;
 import data.privacy.query.cQuery;
 import data.privacy.tools.GenTool;
 
+/**
+ * Converter between the general domain and binary domain.
+ *
+ */
 public class DomainConvertor {
 	
+	// the index of each general attribute in binary domain. 
 	private int[] pos;
+	
+	// the bits of a binary attribute.
 	private int[] len;
+	
 	private Domain gDomain;
 	private Domain bDomain;
 	
@@ -20,8 +28,9 @@ public class DomainConvertor {
 		gDomain = domain;
 		int biDim = 0;
 		
-		// exactly the number of attributes specified in "*.domain" file.
+		// exactly the number of columns specified in "*.domain" file.
 		int dim = domain.getDim();
+		// 
 		pos = new int[dim];
 		len = new int[dim];
 		
@@ -143,14 +152,18 @@ public class DomainConvertor {
 		return new Data(gEntries, gDomain);
 	}
 	
+	/**
+	 * Generalize a binary data row.
+	 * @param binary: a row in binary data.
+	 * @return
+	 */
 	public int[] generalData(int[] binary) {
-		// TODO Auto-generated method stub
 		int[] general = new int[gDomain.getDim()];
 		
 		for (int d = 0; d < gDomain.getDim(); d++){
 			int tmp = 0;
 			for (int p = 0; p < len[d]; p++){
-				tmp *= 2;
+				tmp *= 2; 
 				tmp += binary[pos[d]+p];
 			}
 			general[d] = tmp;

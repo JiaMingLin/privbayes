@@ -13,24 +13,37 @@ import data.privacy.translation.Translator;
 import data.privacy.translation.cTranslator;
 import data.privacy.translation.dTranslator;
 
+/**
+ * description of attributes
+ *
+ */
 public class Domain {
 	
+	// a map of attributes with @Translator.
 	private HashMap<Integer, Translator> trans;
-	private DomainConvertor convertor;
+	
+	// the dimension of data.
 	private int dim;
+	
 	private boolean isBinary;
+	
+	// the array of bin(grid) numbers of a(an) column(attribute).
 	private int[] cells;
 	
-	
+	private DomainConvertor convertor;
+		
 	public Domain(String dataDomain) throws Exception {
-		// TODO Auto-generated method stub
 		trans = new HashMap<Integer, Translator>();
+		
+		// read the "*.domain" from file system. 
 		BufferedReader domainFile = new BufferedReader(new FileReader(dataDomain));
 		
+		// specifies the dimension of data.
 		dim = Integer.parseInt(domainFile.readLine());
 		cells = new int[dim];
 		isBinary = false;
 		
+		// for each attributes.
 		for (int d = 0; d < dim; d++) {
 			
 			// read each line in "*.domain" file, and splitting by space. 
@@ -39,10 +52,15 @@ public class Domain {
 			// the first token defines the attribute type, continuous "C" or discrete "D".
 			if (tokens[0].equals("C")) {
 				
-				// the last integer specified in "*.domain" file when type is "C", which means continuous.
+				// the last integer specified in "*.domain" file, means splitting into numbers(grid) of bins.
 				int grid = Integer.parseInt(tokens[3]);
 				
+				// cache the number of bins of a column.
 				cells[d] = grid;
+				
+				// tokens[1]: max in this column.
+				// tokens[2]: min in this column.
+				// Translator: translate the real value to bin index.
 				trans.put(d, new cTranslator(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]), grid));
 			}
 			else {
@@ -79,34 +97,50 @@ public class Domain {
 	}
 	
 	public int[] getCell() {
-		// TODO Auto-generated method stub
+		 
 		return cells;
 	}
 	
 	public int getCell(int pos) {
-		// TODO Auto-generated method stub
+		 
 		return cells[pos];
 	}
 
 	
 	//Functions
 
+	/**
+	 * @param str: a row in the source data.
+	 * @return: the array of indexes of bin(grid).
+	 */
 	public int[] str2int(String[] str) {
-		// TODO Auto-generated method stub
 		int[] arr = new int[dim];
 		for (int i = 0; i<dim; i++){
+			// for an attribute, map the original value to a bin(grid)
+			// arr[i] is the index of bin(grid).
 			arr[i] = str2int(str[i], i);
 		}
 		return arr;
 	}
 	
+	/**
+	 * @param key: the instance of an attribute, ex: height = 170.
+	 * @param pos: the index of an attribute.
+	 * @return: the index of bin(grid).
+	 */
 	public int str2int(String key, int pos) {
-		// TODO Auto-generated method stub
+		
 		return trans.get(pos).str2int(key);
 	}
 	
+	/**
+	 * Translate the coarse data to readable data.
+	 * @param key: the value to be translated.
+	 * @param pos: index of attribute
+	 * @return
+	 */
 	public String int2str(int key, int pos) {
-		// TODO Auto-generated method stub
+		 
 		return trans.get(pos).int2str(key);
 	}
 	
@@ -115,17 +149,17 @@ public class Domain {
 	}
 	
 	public String src2libsvm(String key, int pos, int[] index) {
-		// TODO Auto-generated method stub
+		 
 		return trans.get(pos).src2libsvm(key, index);
 	}
 	
 	public String src2gsvm(String key, int pos) {
-		// TODO Auto-generated method stub
+		 
 		return trans.get(pos).src2gsvm(key);
 	}
 	
 /*	public String[] int2str(int[] arr) {
-//		// TODO Auto-generated method stub
+//		 
 //		String[] str = new String[dim];
 //		for (int i = 0; i<dim; i++){
 //			str[i] = trans.get(i).revTranslate(arr[i]);
@@ -135,7 +169,7 @@ public class Domain {
 */
 
 	public Data binarization(Data gData) {
-		// TODO Auto-generated method stub
+		 
 		if (convertor == null) {
 			convertor = new DomainConvertor(this);
 		}
@@ -144,7 +178,7 @@ public class Domain {
 	}
 	
 	public cQuery qBinarization(cQuery gCq) {
-		// TODO Auto-generated method stub
+		 
 		if (convertor == null) {
 			convertor = new DomainConvertor(this);
 		}
@@ -153,7 +187,7 @@ public class Domain {
 	}
 	
 	public HashSet<cQuery> qBinarization(HashSet<cQuery> gCq) {
-		// TODO Auto-generated method stub
+		 
 		if (convertor == null) {
 			convertor = new DomainConvertor(this);
 		}
@@ -162,7 +196,7 @@ public class Domain {
 	}
 	
 	public HashMap<cQuery, cQuery> qBinarizationMap(HashSet<cQuery> gCq) {
-		// TODO Auto-generated method stub
+		 
 		if (convertor == null) {
 			convertor = new DomainConvertor(this);
 		}
@@ -172,7 +206,7 @@ public class Domain {
 	
 	
 	public HashSet<Marginal> mBinarization(HashSet<Marginal> gMrg) {
-		// TODO Auto-generated method stub
+		 
 		if (convertor == null) {
 			convertor = new DomainConvertor(this);
 		}
@@ -181,17 +215,17 @@ public class Domain {
 	}
 
 	private int[] generalization(int[] bTuple) {
-		// TODO Auto-generated method stub
+		 
 		return convertor.generalData(bTuple);
 	}
 	
 	public Data generalization(Data bData) {
-		// TODO Auto-generated method stub
+
 		return convertor.generalData(bData);
 	}
 	
 	public boolean tupleCheck(int[] tuple) {
-		// TODO Auto-generated method stub
+		 
 		if (isBinary) {
 			return convertor.tupleCheck(generalization(tuple));
 		}
@@ -209,7 +243,7 @@ public class Domain {
 	}
 
 	public boolean isCategorical(int pos) {
-		// TODO Auto-generated method stub
+		 
 		// if (cells[pos] == 2) return true;
 		return trans.get(pos) instanceof dTranslator;
 	}

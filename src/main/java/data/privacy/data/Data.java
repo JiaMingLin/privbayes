@@ -17,30 +17,52 @@ import data.privacy.tools.GenTool;
 import data.privacy.tools.Sortable;
 import data.privacy.tools.TimeBottle;
 
+
+/**
+ * cache the source data into memory.
+ *
+ */
 public class Data implements CountingQuery, ContingencyTable{
 	
 	private HashMap<String, Double> global;
+	
+	// the translated data. 
 	private int[][] entries;
+	
+	// the number of rows
 	private int num;
+	
 	private Domain domain;
+	
+	// cache the counting result for each @cQuery, for example, the number of instances satisfy (height=160 & weight=50)    
 	private HashMap<cQuery, Double> cCache;
-	private HashMap<Marginal, Double> fCache;
-	private HashMap<Dependence, Double> iCache;
+	
+	// cache the score for each @Dependence
 	private HashMap<Dependence, Double> l1Cache;
 	
-	
+	private HashMap<Marginal, Double> fCache;
+	private HashMap<Dependence, Double> iCache;
+
 	//Basic
 	
 	public Data(String dataFileName, Domain domain1) throws Exception {
-		
+		// loading data from file system.
 		BufferedReader dataFile = new BufferedReader(new FileReader(dataFileName));
 		
+		// columns specification.
 		domain = domain1;
+		
+		// the first line of source data, specifies the number of rows.
 		num = Integer.parseInt(dataFile.readLine());
+		
+		// a matrix to cache all the data in memory.
 		entries = new int[num][domain.getDim()];
+		
+		
 		global = new HashMap<String, Double>();
 		
 		for (int s = 0; s < num; s++){
+			// token is each cell value of each row.
 			int[] intTokens = domain.str2int(dataFile.readLine().split("\\s+"));
 			updateGlobal(intTokens);
 			entries[s] = intTokens;
@@ -54,7 +76,6 @@ public class Data implements CountingQuery, ContingencyTable{
 	}
 	
 	public Data(int[][] entries1, Domain domain1) {
-		// TODO Auto-generated constructor stub
 		entries = entries1;
 		domain = domain1;
 		
@@ -71,8 +92,11 @@ public class Data implements CountingQuery, ContingencyTable{
 		l1Cache = new HashMap<Dependence, Double>();
 	}	
 	
+	/**
+	 * @param intTokens: each row in data.
+	 */
 	private void updateGlobal(int[] intTokens) {
-		// TODO Auto-generated method stub
+		 
 		String tuple = Arrays.toString(intTokens);		
 		Double gCount = global.get(tuple);
 		
@@ -88,43 +112,45 @@ public class Data implements CountingQuery, ContingencyTable{
 		return domain.binarization(this);
 	}
 	
+	/**
+	 * Generalize data from binary data. 
+	 * @return
+	 */
 	public Data generalization() {
-		// TODO Auto-generated method stub
+		 
 		return domain.generalization(this);
 	}
 	
 	public cQuery qBinarization(cQuery gCq) {
-		// TODO Auto-generated method stub
+		 
 		return domain.qBinarization(gCq);
 	}
 	
 	public HashSet<cQuery> qBinarization(HashSet<cQuery> gCq) {
-		// TODO Auto-generated method stub
+		 
 		return domain.qBinarization(gCq);
 	}
 	
 	public HashMap<cQuery, cQuery> qBinarizationMap(HashSet<cQuery> gCq) {
-		// TODO Auto-generated method stub
+		 
 		return domain.qBinarizationMap(gCq);
 	}
 	
 	public HashSet<Marginal> mBinarization(HashSet<Marginal> gMrg) {
-		// TODO Auto-generated method stub
+		 
 		return domain.mBinarization(gMrg);
 	}
 	
 	
 	
 	public boolean tupleCheck(int[] tuple) {
-		// TODO Auto-generated method stub
+		 
 		return domain.tupleCheck(tuple);
 	}
 	
 	public ArrayList<HashSet<Integer>> relatedAttr() {
 		return domain.relatedAttr();
 	}
-	
-	//Query Answering
 	
 	public Double cReq(cQuery q){
 		Double qa = cCache.get(q);
@@ -144,7 +170,7 @@ public class Data implements CountingQuery, ContingencyTable{
 	}
 
 /*	private double cAns(cQuery q) {
-//		// TODO Auto-generated method stub
+//		 
 //		double ans = 0.0;
 //		for (int i = 0; i<num; i++){
 //			ans += cMatch(q, entries[i]);
@@ -155,7 +181,7 @@ public class Data implements CountingQuery, ContingencyTable{
 //	}
 //	
 //	private int cMatch(cQuery q, int[] e) {
-//		// TODO Auto-generated method stub
+//		 
 //		for (int i : q.keySet()){
 //			if (e[i] != q.get(i))
 //				return 0;
@@ -164,8 +190,13 @@ public class Data implements CountingQuery, ContingencyTable{
 //	}
 */
 	
+	/**
+	 * Find how many rows satisfy the given query.
+	 * @param q: query.
+	 * @return
+	 */
 	private double cAns(cQuery q) {
-		// TODO Auto-generated method stub
+		 
 		int[] pos = new int[q.size()];	
 		int[] val = new int[q.size()];	
 		int len = 0;
@@ -208,7 +239,7 @@ public class Data implements CountingQuery, ContingencyTable{
 	}
 
 /*	private double fourier(fQuery q) {
-//		// TODO Auto-generated method stub
+//		 
 //		int fsize = (int) Math.pow(2.0, q.size());
 //		double ans = 0.0;
 //		
@@ -237,7 +268,7 @@ public class Data implements CountingQuery, ContingencyTable{
 */
 	
 /*	private double fAns(Marginal q) {
-//		// TODO Auto-generated method stub
+//		 
 //		double ans = 0.0;
 //		
 //		for (int i = 0; i<num; i++){
@@ -249,7 +280,7 @@ public class Data implements CountingQuery, ContingencyTable{
 //	}
 //	
 //	private int fMatch(Marginal q, int[] e) {
-//		// TODO Auto-generated method stub
+//		 
 //		int sgn = 1;
 //		for (int i : q.set()){
 //			if (e[i] == 1)
@@ -260,7 +291,7 @@ public class Data implements CountingQuery, ContingencyTable{
 */
 	
 	private double fAns(Marginal q) {
-		// TODO Auto-generated method stub
+		 
 		int[] pos = new int[q.size()];		
 		int len = 0;
 		for (int i : q.set()){
@@ -280,33 +311,41 @@ public class Data implements CountingQuery, ContingencyTable{
 		return ans;
 	}
 
+	/**
+	 * @param dep: an AP-Pair
+	 * @return
+	 */
 	public Double l1Req(Dependence dep){
 		Double qa = l1Cache.get(dep);
 		if (qa == null) qa = l1Ans(dep);
 		return qa;
 	}
 
+	/**
+	 * Calculate the l1 value for an AP-Pair
+	 * TODO understanding the scoring mechanism, Update State.
+	 * @param dep: an AP-Pair
+	 * @return
+	 */
 	private Double l1Ans(Dependence dep) {
-		// TODO Auto-generated method stub
+
 		double ans = 0.0;
 		
 		HashMap<Integer, Integer> states = new HashMap<Integer, Integer>();
 		states.put(0, 0);
 		int ceil = (num+1)/2; // num = data size
 		
-//		long cq_start = System.currentTimeMillis();
-		HashSet<cQuery> CQSet = QueryGenerator.mrg2cq(this, dep.p);
-//		System.out.println(CQSet.size());
-//		System.out.println(CQSet);
-//		long cq_stop = System.currentTimeMillis();
-//		System.out.println("Numbers of CQ: "+CQSet.size());
-//		System.out.println("CQ Spands: "+(cq_stop - cq_start));
-		
+		// the set of all the possible queries for parents set of an AP-Pair.
+		HashSet<cQuery> CQSet = QueryGenerator.mrg2cq(this, dep.p);		
 		
 		long scoring_start = System.currentTimeMillis();
 		for (cQuery cq : CQSet){
 			
 			long cReq_start = System.currentTimeMillis();
+			/*
+			 * in mutual information, we have to calculate results for all the possible values of an attribute,
+			 * this is probably the reason of binarization.
+			 */
 			cq.put(dep.x, 0);
 			int a = cReq(new cQuery(cq)).intValue();
 			long cReq_stop = System.currentTimeMillis();
@@ -330,14 +369,13 @@ public class Data implements CountingQuery, ContingencyTable{
 					newStates.put(A, newB);
 				}
 			}
-//			System.out.println("State size: "+states.size());
+
 			long update_state_stop = System.currentTimeMillis();
 			TimeBottle.saveTime("State Update", (int)(update_state_stop - update_state_start));
 			states = newStates;
 		}
 		
 		long scoring_stop = System.currentTimeMillis();
-//		System.out.println("Scoring Spends: "+ (scoring_stop - scoring_start));
 		TimeBottle.saveTime("Scoring", (int)(scoring_stop - scoring_start));
 		ans = -num;
 		
@@ -359,7 +397,7 @@ public class Data implements CountingQuery, ContingencyTable{
 	}
 
 /*	private Double iAns(Dependence dep) {
-//		// TODO Auto-generated method stub
+//		 
 //		double ans = 0.0;
 //		double A = cReq(new cQuery(dep.x, 0));
 //		double B = cReq(new cQuery(dep.x, 1));
@@ -387,7 +425,7 @@ public class Data implements CountingQuery, ContingencyTable{
 */
 	
 	private Double iAns(Dependence dep) {
-	// TODO Auto-generated method stub
+	 
 	double ans = 0.0;
 
 	for (cQuery cq : QueryGenerator.mrg2cq(this, dep.p)) {
@@ -431,7 +469,7 @@ public class Data implements CountingQuery, ContingencyTable{
 	}
 	
 	public double c2Error(CountingQuery cmp, HashSet<cQuery> cq) {
-		// TODO Auto-generated method stub
+		 
 		double cErr = 0.0;
 		
 		for (cQuery q : cq){
@@ -443,7 +481,7 @@ public class Data implements CountingQuery, ContingencyTable{
 	}
 	
 	public double mError(CountingQuery cmp, Marginal mrg, PrintStream outFile) {
-		// TODO Auto-generated method stub
+		 
 		double mErr = 0.0;
 		HashSet<cQuery> cQs = QueryGenerator.mrg2cq(this, mrg);
 		
@@ -527,32 +565,32 @@ public class Data implements CountingQuery, ContingencyTable{
 	}
 	
 	public int getDim() {
-		// TODO Auto-generated method stub
+		 
 		return domain.getDim();
 	}
 
 	public int getNum() {
-		// TODO Auto-generated method stub
+		 
 		return num;
 	}
 
 	public int[] getCell() {
-		// TODO Auto-generated method stub
+		 
 		return domain.getCell();
 	}
 
 	public int getCell(int pos) {
-		// TODO Auto-generated method stub
+		 
 		return domain.getCell(pos);
 	}
 		
 	public HashMap<String, Double> getTable() {
-		// TODO Auto-generated method stub
+		 
 		return global;
 	}
 	
 	public int[] getEntry(int row) {
-		// TODO Auto-generated method stub
+		 
 		return entries[row];
 	}
 
@@ -592,13 +630,20 @@ public class Data implements CountingQuery, ContingencyTable{
 	
 	// I/O
 	
+	/**
+	 * Output the data from memory to file.
+	 * @param outName: file path.
+	 * @param separator: the delimiter of cells in a row.
+	 * @throws Exception
+	 */
 	public void printo_int(String outName, String separator) throws Exception {
-		// TODO Auto-generated method stub
 		PrintStream outFile = new PrintStream(new File(outName));
 		int dim = domain.getDim();
 		
 		for (int i = 0; i<num; i++){
+			// write row.
 			for (int j = 0; j < dim - 1; j++) {
+				// write cell
 				outFile.print(entries[i][j] + separator);
 			}
 			outFile.println(entries[i][dim - 1]);
@@ -607,8 +652,14 @@ public class Data implements CountingQuery, ContingencyTable{
 		outFile.close();
 	}
 	
+	/**
+	 * Output the data from memory to file
+	 * @param outName: output file path.
+	 * @param separator: 
+	 * @throws Exception
+	 */
 	public void printo_data(String outName, String separator) throws Exception {
-		// TODO Auto-generated method stub
+		 
 		PrintStream outFile = new PrintStream(new File(outName));
 		int dim = domain.getDim();
 		
@@ -625,7 +676,7 @@ public class Data implements CountingQuery, ContingencyTable{
 	}
 	
 	public void printo_c45(String outName, int label, HashSet<Integer> thres) throws Exception {
-		// TODO Auto-generated method stub
+		 
 		PrintStream outFile = new PrintStream(new File(outName));
 		
 		for (int i = 0; i<num; i++){
@@ -644,7 +695,7 @@ public class Data implements CountingQuery, ContingencyTable{
 	}
 	
 	public void printo_libsvm(String outName, int label, double thres) throws Exception {
-		// TODO Auto-generated method stub
+		 
 		PrintStream outFile = new PrintStream(new File(outName));
 	
 		for (int i = 0; i<num; i++) {
@@ -666,7 +717,7 @@ public class Data implements CountingQuery, ContingencyTable{
 	}
 	
 	public void printo_libsvm(String outName, int label, HashSet<Integer> thres) throws Exception {
-		// TODO Auto-generated method stub
+		 
 		PrintStream outFile = new PrintStream(new File(outName));
 		
 		for (int i = 0; i<num; i++) {
@@ -688,7 +739,7 @@ public class Data implements CountingQuery, ContingencyTable{
 	}
 	
 /*	public void printo_libsvm(String outName, int label) throws Exception {
-//		// TODO Auto-generated method stub
+//		 
 //		PrintStream outFile = new PrintStream(new File(outName));
 //	
 //		for (int i = 0; i<num; i++) {
@@ -715,7 +766,7 @@ public class Data implements CountingQuery, ContingencyTable{
 */
 	
 /*	public void printo_svm(String outName, int label) throws Exception {
-//		// TODO Auto-generated method stub
+//		 
 //		PrintStream outFile = new PrintStream(new File(outName));
 //		
 //		for (int i = 0; i<num; i++) {		
@@ -744,7 +795,7 @@ public class Data implements CountingQuery, ContingencyTable{
 */
 
 	public void writeCache(HashSet<cQuery> cqs, String string) throws Exception {
-		// TODO Auto-generated method stub
+		 
 		PrintStream outFile = new PrintStream(new File(string));
 		
 		int ncq = cqs.size();
@@ -763,7 +814,7 @@ public class Data implements CountingQuery, ContingencyTable{
 	}
 
 	public void loadCache(String string) throws Exception {
-		// TODO Auto-generated method stub
+		 
 		BufferedReader inFile = new BufferedReader(new FileReader(string));
 		
 		String s = inFile.readLine();

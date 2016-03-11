@@ -32,7 +32,7 @@ public class Bayes_marginals {
 		Data gData = new Data(sourceData, new Domain(domainData));		//load data (in general domain)
 		Data bData = gData.binarization();												//binarization
 		//bData.loadCache("bData"+ds+"_"+(kb[ds]+1)+"ways.cache");						//cache file contains ALL k-way marginals of the BINARY DATA (makes computation faster)
-		int rep = 10;
+		int rep = 1;
 				
 		HashSet<Marginal> mrgs = QueryGenerator.kwayMrg(gData, wl);						//generate workload
 		PrintStream outFile = new PrintStream(new File(report));
@@ -45,7 +45,7 @@ public class Bayes_marginals {
 			for (Marginal mrg : mrgs) {
 				gData.mError(gSyn, mrg, outFile);										//total variation distance of each marginal
 			}
-			//outFile.println("+++++++++++++++++++++++++++++++++++++++++++++++++++");
+			outFile.println("+++++++++++++++++++++++++++++++++++++++++++++++++++");
 		}
 
 		outFile.close();			

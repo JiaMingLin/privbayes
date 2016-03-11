@@ -3,6 +3,10 @@ package data.privacy.query;
 import java.util.HashMap;
 import java.util.HashSet;
 
+/**
+ * implements of a query, for example, height=170 and weight=60
+ *
+ */
 public class cQuery {
 	private HashMap<Integer, Integer> details;
 	

@@ -28,6 +28,12 @@ public class GenTool {
 		return Math.log(d)/Math.log(2);
 	}
 	
+	/**
+	 * The set of all subsets of S with size k 
+	 * @param S
+	 * @param k
+	 * @return
+	 */
 	public static <T> HashSet<HashSet<T>> kSub(HashSet<T> S, int k) {
 		// TODO Auto-generated method stub
 		HashSet<HashSet<T>> ans = new HashSet<HashSet<T>>();

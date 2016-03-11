@@ -5,6 +5,7 @@ public class cTranslator implements Translator{
 	
 	public cTranslator(double min1, double max1, int grid1){
 		min = min1;
+		// length of interval
 		step = (max1-min1)/grid1;
 		grid = grid1;
 	}

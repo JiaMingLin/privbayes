@@ -2,6 +2,10 @@ package data.privacy.tools;
 
 import java.util.HashSet;
 
+/**
+ * implements of AP-Pair(attribute with its parents pair).
+ *
+ */
 public class Dependence {
 
 	public int x;
