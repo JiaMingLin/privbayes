@@ -204,8 +204,7 @@ public class Data implements CountingQuery, ContingencyTable{
 			pos[len] = i;
 			val[len] = q.get(i);
 			len++;
-		}
-		
+		}		
 		double ans = 0.0;
 		for (int i = 0; i<num; i++){
 			int inc = 1;

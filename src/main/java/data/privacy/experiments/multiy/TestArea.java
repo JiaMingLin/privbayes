@@ -1,6 +1,7 @@
 package data.privacy.experiments.multiy;
 
 import java.util.HashSet;
+import java.util.Random;
 
 import data.privacy.data.Data;
 import data.privacy.data.Domain;
@@ -9,13 +10,21 @@ import data.privacy.query.cQuery;
 import data.privacy.system.PropReader;
 import data.privacy.tools.Dependence;
 import data.privacy.tools.GenTool;
+import data.privacy.tools.PrivTool;
 
 public class TestArea {
 
 	private static final String RESOURCE_PATH = PropReader.getPropStr("RESOURCE_PATH");
 	public static void main(String[] args) throws Exception {		
-		testMrg2CQ();
-		testCAns();
+//		testMrg2CQ();
+//		testCAns();
+		testIntToStr(2);
+		testIntToStr(3);
+		testIntToStr(4);
+		testIntToStr(5);
+		testIntToStr(6);
+		testIntToStr(1);
+		
 								
 	}
 	
@@ -73,5 +82,36 @@ public class TestArea {
 		System.out.println("Dependency: "+dep);				
 		int result = bTrain.cReq(cq).intValue();
 		System.out.println(result);
+	}
+	
+	public static void testLaplace(){
+		Random rng = new Random();
+		int dim = 31;
+		int k = 2;
+		double ep = 10;
+		
+		
+		for(int i = 0; i < 100; i ++ ){
+			double U = rng.nextDouble()-0.5;
+//			System.out.println(U+", "+Math.signum(U));
+			System.out.println(PrivTool.LaplaceDist(rng, 2.0*(dim-k)/(ep*40000)));
+		}
+	}
+	
+	public static void testStrToInt(){
+		System.out.println(Math.floor(14.999999));
+		System.out.println(1e-4 == 0.0001);
+		System.out.println((int) Math.floor( (Double.parseDouble("38") - 20) / (3 + 1e-4) ));
+		System.out.println((int) Math.floor( (Double.parseDouble("56") - 20) / (3 + 1e-4) ));
+		System.out.println((int) Math.floor( (Double.parseDouble("43") - 20) / (3 + 1e-4) ));
+		System.out.println((int) Math.floor( (Double.parseDouble("64") - 20) / (3 + 1e-4) ));
+		System.out.println((int) Math.floor( (Double.parseDouble("26") - 20) / (3 + 1e-4) ));
+	}
+	
+	public static void testIntToStr(int index){
+
+		int step = 1;
+		int min = 12;
+		System.out.println((index + 0.5) * step + min);
 	}
 }

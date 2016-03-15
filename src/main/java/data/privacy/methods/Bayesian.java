@@ -25,6 +25,8 @@ public class Bayesian implements CountingQuery, ContingencyTable {
 	private HashMap<cQuery, Double> cCache_Noisy;					//noisy marginals
 
 	/**
+	 * Training the Bayesian Network
+	 * 
 	 * @param rng1: random seed
 	 * @param data1: sensitive database;
 	 * @param ep: privacy budget;
@@ -51,7 +53,7 @@ public class Bayesian implements CountingQuery, ContingencyTable {
 		if (k == 0) alloc = 0.0;									
 		
 		//learn Bayesian network, budget: ep * alloc
-		DAG model = Model_Greedy(ep * alloc);						 
+		DAG model = Model_Greedy(ep * alloc);		
 		int[][] intSyn = null;								
 		
 		//generate noisy marginals, budget: ep * (1-alloc)
@@ -71,6 +73,7 @@ public class Bayesian implements CountingQuery, ContingencyTable {
 		if (k == 0) alloc = 0.0;
 		
 		DAG model = Model_Greedy(ep * alloc);
+		System.out.println(model);
 		int[][] intSyn = null;
 		InjectNoise(ep * (1-alloc), model);
 		intSyn = Sampling(data.getNum(), model);
@@ -120,7 +123,7 @@ public class Bayesian implements CountingQuery, ContingencyTable {
 			HashSet<Dependence> tempSet = S2V(S, V, k);
 			long stop_s2v = System.currentTimeMillis();
 			TimeBottle.saveTime("S2V",(int)(stop_s2v-start_s2v));
-			
+			System.out.println(tempSet.size());
 			long start_l1 = System.currentTimeMillis();
 			// scoring each one AP-Pair.
 			for (Dependence dep : tempSet){
@@ -201,6 +204,7 @@ public class Bayesian implements CountingQuery, ContingencyTable {
 		cCache_Noisy = new HashMap<cQuery, Double>();
 		
 		// for each attribute indexed from k to dim-1
+		System.out.println("Inject noise budget: "+ep);
 		for (int i = k; i<dim; i++){
 			// retrieve the parents set of an attribute.
 			HashSet<Integer> mrg = new HashSet<Integer>(model.get(i).p);
@@ -208,10 +212,14 @@ public class Bayesian implements CountingQuery, ContingencyTable {
 			mrg.add(model.get(i).x);
 			
 			for (cQuery cq : QueryGenerator.mrg2cq(data, mrg)){
+				
 				cCache_Noisy.put(cq, Math.max(data.cReq(cq) + PrivTool.LaplaceDist(rng, 2.0*(dim-k)/ep), 0.0));
+//				cCache_Noisy.put(cq, data.cReq(cq));
 			}
 		}
 
+		
+		
 		// [0, k-1] based on k-th marginal
 		// retrieve the parents set of attribute indexed k.
 		HashSet<Integer> pre = new HashSet<Integer>(model.get(k).p);
@@ -265,7 +273,7 @@ public class Bayesian implements CountingQuery, ContingencyTable {
 				Dependence dep = model.get(j);
 				cQuery pre = new cQuery();
 				
-				for (int p : dep.p) {
+				for (int p : dep.p) {					
 					pre.put(p, intSyn[i][p]);
 				}
 				
@@ -308,7 +316,7 @@ public class Bayesian implements CountingQuery, ContingencyTable {
 		}
 		
 		if (sum == 0.0) return rng.nextInt(d);
-		double pick = sum * rng.nextDouble();
+		double pick = sum * rng.nextDouble();		
 		double cum = 0.0;
 		
 		for (int i = 0; i < d; i++){
